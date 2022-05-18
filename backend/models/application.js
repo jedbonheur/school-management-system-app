@@ -43,6 +43,10 @@ const applicationSchema = new Schema({
   motivational_letter: {
     type: String,
     require: true
+  },
+  status: {
+    type: String,
+    require: true
   }
 }
 ,{ versionKey: false })

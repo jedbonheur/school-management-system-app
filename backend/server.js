@@ -3,7 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const route = require('./routes/routes');
+const AuthRoutes = require('./routes/auth-routes');
+const MainRoutes = require('./routes/main-routes');
 const app = express();
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
@@ -25,7 +26,8 @@ app.use(express.static("public"))
 app.use(express.json())
 
 // use routes
-app.use(route)
+app.use(AuthRoutes)
+app.use(MainRoutes)
 
   // Node spins up our server and sets it to listen on port 8000.
 

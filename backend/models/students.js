@@ -4,6 +4,18 @@ const {Schema } = mongoose;
 // schema of model @ applications
 
 const studentSchema = new Schema({
+  username: {
+   type: String,
+   require: true
+  },
+  password: {
+   type: String,
+   require: true
+  }, 
+  role: {
+   type: String,
+   require: true
+  }, 
   studentId: {
    type: String,
    require: true
@@ -51,12 +63,10 @@ const studentSchema = new Schema({
           },
      ],
   courses :[
-  {
-   courseId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Course'
-   }
-  }
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Course'
+    }
   ]
 },{ versionKey: false })
 

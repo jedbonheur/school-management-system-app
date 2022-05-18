@@ -1,8 +1,13 @@
 import React,{useContext} from 'react';
 import GlobalStyle from '../common/GlobalStyle'
 import styled from "styled-components";
-import StudentSidebar from './Sidebars/StudentSidebar'
 import StudentRoutes from '../routes/StudentRoutes'
+import TeacherRoutes from '../routes/TeacherRoutes'
+import AdminRoutes from '../routes/AdminRoutes'
+import RoutesController from '../routes/RoutesController'
+import AdminSidebar from './Sidebars/AdminSidebar'
+import StudentSidebar from './Sidebars/StudentSidebar'
+import TeacherSidebar from './Sidebars/TeacherSidebar'
 import HeaderBar from './HeaderBar/HeaderBar';
 import {AppContext} from "../contexts/AppContext"
 
@@ -12,12 +17,25 @@ const App = () => {
     showSmallSidebar,
     isMobile,
     showNav,
-    setShowNav
+    setShowNav,
+     accessUser,
+     auth,
   } = useContext(AppContext)
-  console.log(isMobile)
-return (
-  <>
+  
+
+  const controllerAdmin = () => auth  && accessUser.role === 'admin'
+  const controllerStudent = () => auth  && accessUser.role === 'student'
+  const controllerTeacher = () => auth  && accessUser.role === 'teacher'
+  
+
+  return (
+    <>
     <GlobalStyle/>
+    {
+     !auth && (
+       <RoutesController/>
+     )
+    }
     <AppWrapper
      isMobile = {isMobile}
     >
@@ -25,7 +43,21 @@ return (
            showNav={showNav}
            isMobile = {isMobile}
           >
+          {
+          controllerAdmin() && (
+            <AdminSidebar />
+          )
+          } 
+          {
+          controllerStudent() && (
             <StudentSidebar/>
+            )
+          } 
+          {
+           controllerTeacher() && (
+            <TeacherSidebar />
+          )
+          } 
         </SidebarView>
         {showNav && 
          <Modal
@@ -36,8 +68,26 @@ return (
           showSmallSidebar={showSmallSidebar}
           isMobile = {isMobile}
           >
-          <HeaderBar/>
-          <StudentRoutes />
+          {
+          auth && (
+            <HeaderBar/>
+          )
+          }
+          {
+          controllerAdmin() && (
+            <AdminRoutes />
+          )
+          } 
+          {
+          controllerStudent() && (
+            <StudentRoutes />
+          )
+          } 
+          {
+          controllerTeacher() && (
+            <TeacherRoutes />
+          )
+          } 
         </AppView>
         {/* <Footer/> */}
     </AppWrapper>

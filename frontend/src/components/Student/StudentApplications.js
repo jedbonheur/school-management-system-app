@@ -6,7 +6,6 @@ const StudentApplications = () => {
 const {
     user,
 } = useContext(AppContext)
- console.log(user)
  
  if(!user.studentApplication_id){
    return <p>Loading....</p>
@@ -27,11 +26,11 @@ const {
       {
         user.studentApplication_id.map((application) => {
           return (
-         <tr className="record" key={application}>
+         <tr className="record" key={application._id}>
              <td>{application.firstName} {application.lastName}</td>
              <td>{application.program}</td>
              <td>{application.semester}</td> 
-             <td>status</td> 
+             <td>{application.semester ? 'Approved' : 'Not Approved'}</td> 
          </tr>
           )
         }) 
@@ -43,6 +42,12 @@ const {
 };
 
 const ViewApplications = styled.div`
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 td, th {
     border: 1px solid #ffffff;
     text-align: left;

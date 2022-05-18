@@ -47,6 +47,7 @@ export default createGlobalStyle`
     background: #e6e6e6ab;
     border: none;
     padding: 7px 3px;
+    text-transform: capitalize;
     border-radius: 5px;
     outline: unset;
 }
@@ -86,6 +87,7 @@ span.date_placeholder {
     border-radius: 5px;
     padding: 7px 3px;
     outline: unset;
+    text-transform: capitalize;
 }.inputBloack select:focus {
     background: #ffc107;
     color: black;
@@ -94,7 +96,9 @@ span.date_placeholder {
 .file_input {
     background: none !important;
 }
-
+input[type='email'] {
+    text-transform: lowercase !important;
+}
 button.btn {
     display: block;
     padding: 1rem 4rem;
@@ -120,6 +124,9 @@ button.btn {
     color: black;
 }
 
+textarea.text-input {
+    padding: 5px;
+}
 
 // ************************formik styling**********************************
 // ************************************************************************

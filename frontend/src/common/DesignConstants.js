@@ -22,7 +22,6 @@ const PageWrapperWrapper = styled.div`
     display: block;
     border-radius: 20px;
     padding: ${({isMobile}) => isMobile ? '2rem 1rem' : '2rem'};
-    2rem 1rem;
     margin-top: 30px;
 }
 `
@@ -44,5 +43,11 @@ const PageViewWrapper = styled.div`
     &:hover {
     box-shadow: 0px 0px 4px 0px #ffc107;
     transition: all 300ms ease;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 `

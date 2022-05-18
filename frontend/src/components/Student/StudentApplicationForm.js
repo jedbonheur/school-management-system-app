@@ -10,7 +10,8 @@ const StudentApplicationForm = () => {
   const navigate = useNavigate();
   return (
     <>
-      <h2>Apply</h2>
+      <img className="title-image" src='/images/schoolAdminLogo.png' alt='logo'/>
+      <h2>Apply as a New Student</h2>
       <Formik
         initialValues={{
           fname: '',
@@ -40,11 +41,11 @@ const StudentApplicationForm = () => {
         axios.postForm('/apply', formParams)
         .then(function (response) {
           if(response.status === 200){
-            navigate("/student/thankyou", { replace: true, state: 'Thank you for your Application' });
+            navigate("/student-apply/thankyou", { replace: true, state: 'Thank you for your Application' });
           }
         })
         .catch(function (error) {
-          console.log(error);
+          navigate('/page-404')
         });
         }}
       
@@ -124,7 +125,6 @@ const StudentApplicationForm = () => {
             accept='application/pdf'
             required
             onChange={(event) => {
-              console.log('event',event.currentTarget.files)
               setFieldValue("motivational_letter", event.currentTarget.files[0])
             }}
           /> 

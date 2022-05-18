@@ -6,11 +6,6 @@ const StudentProfile = () => {
 const {
     user,
 } = useContext(AppContext)
-  
- console.log(user)
- // if(!user) {
- //  return <p>loading ...</p>
- // }
  
  return (
   <ProfileWrapper
@@ -81,7 +76,7 @@ const ProfileWrapper = styled.div`
     background-size: cover;
     border-radius: 7px;
     box-shadow: 0px 0px 5px #0000005e;
-    background-image: url(${({user}) => user.user_photo ? user.user_photo : '/images/userimage-holder.png' })
+    background-image: url(${({user}) => user.user_photo ? `"${user.user_photo}"` : '/images/userimage-holder.png'});
 }
 .student-info {
     display: flex;
@@ -108,6 +103,7 @@ td.key {
 }
 td.value {
     padding-left: 25px;
+    text-transform: capitalize;
 }
 
 tbody tr {

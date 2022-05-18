@@ -1,11 +1,23 @@
 import React from 'react';
-
-const courses = () => {
+import {PageWrapper,PageView} from "../../../common/DesignConstants"
+import PageTitle from "../../UIs/PageTitle"
+import StudentCourses from "../../Student/StudentCourses";
+const Courses = () => {
  return (
-  <div>
-   courses
-  </div>
+  <PageWrapper>
+   <PageTitle 
+    title='My Courses'
+    homePath='dashboard'
+    page='courses'
+   />
+   <PageView>
+      <StudentCourses />
+   </PageView>
+  </PageWrapper>
  );
 };
 
-export default courses;
+
+
+
+export default Courses;

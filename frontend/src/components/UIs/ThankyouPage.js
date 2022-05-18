@@ -7,7 +7,6 @@ import {useLocation } from 'react-router-dom';
 import PageTitle from "../UIs/PageTitle"
 const ThankyouPage = () => {
 const location = useLocation();
-console.log('location',location)
  return (
  <PageWrapper>
    <PageTitle 

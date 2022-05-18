@@ -8,20 +8,40 @@ const courseSchema = new Schema({
    type: String,
    require: true
   },
+  course_code: {
+   type: String,
+   require: true
+  },
   course_depertment: {
    type: String,
    require: true
   },
-  lecture: {
+  schedule: {
    type: String,
    require: true
   },
+  instructor:[
+   {
+      type: Schema.Types.ObjectId,
+      ref: 'Teacher'
+   }
+  ],
   students:[
    {
-    studentId:{
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'Student'
-    }
+   }
+  ],
+  assignments:[
+   {
+      type: Schema.Types.ObjectId,
+      ref: 'Assignment'
+   }
+  ],
+  exams:[
+   {
+      type: Schema.Types.ObjectId,
+      ref: 'Exam'
    }
   ]
 }

@@ -6,8 +6,8 @@ import { solid} from '@fortawesome/fontawesome-svg-core/import.macro'
 import {AppContext} from "../../contexts/AppContext";
 
 const Sidebar = () => {
- const {showSmallSidebar,isMobile,setShowNav} = useContext(AppContext)
- return (
+   const {showSmallSidebar,isMobile,setShowNav} = useContext(AppContext)
+   return (
   <SidebarWrapper 
      showSmallSidebar={showSmallSidebar}
      isMobile={isMobile}
@@ -79,7 +79,7 @@ const Sidebar = () => {
             <span className="navigation_item">Courses</span>
           </NavLink>
        </li>
-       <li>
+       {/* <li>
           <NavLink
           className={({ isActive }) => isActive ? "activeLink" : ""}
           to='/student/exams'>
@@ -88,7 +88,7 @@ const Sidebar = () => {
             </span>
             <span className="navigation_item">Exams</span>
           </NavLink>
-       </li>
+       </li> */}
       </ul>
      </div>
   </SidebarWrapper>

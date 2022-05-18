@@ -1,9 +1,15 @@
-import React, {useContext,useEffect} from 'react';
+import React, {useContext,useEffect,useState} from 'react';
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid} from '@fortawesome/fontawesome-svg-core/import.macro';
 import {AppContext} from "../../contexts/AppContext"
 import UserImage from '../UIs/UserImage';
+import { getRouteByRole,getAnouncementUrl } from '../../common/HelperFunctions';
+import {reactLocalStorage} from 'reactjs-localstorage';
+import {useNavigate } from 'react-router-dom';
+import Dropdown from './Dropdown'
+import DropdownNotification from './DropdownNotification';
+const axios = require('axios')
 
 const HeaderBar = () => {
   const {
@@ -12,34 +18,81 @@ const HeaderBar = () => {
     showSmallSidebar,
     setShowSmallSidebar,
     mobileNav,
-    showNav,
     setShowNav,
-    isMobile
+    isMobile,
+     accessUser,
+     setAccessUser,
+     auth,
+     setAuth,
+     announcement,
+     setAnnouncement
   } = useContext(AppContext)
+  const [displayDropDown, setDisplayDropDown] = useState(false)
+  const [displayDropDownNotify, setDisplayDropDownNotify] = useState(false)
+
+  const navigate = useNavigate();
+
+  const showDropDown = () => {
+    setDisplayDropDown(true)
+  }
+  const hideDropDown = () => {
+    setDisplayDropDown(false)
+  }
+  const showDropDownNotify = () => {
+    setDisplayDropDownNotify(!displayDropDownNotify)
+  }
+
+
   
-  let id = 11135
+  const role = () =>  accessUser.role
+
+  const user_id = () =>  accessUser.user_id
   useEffect(() => {
-    fetch(`/getStudent/${id}`)
-    .then(res=> res.json())
-    .then(response => {
-       setUser(response.data)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    const getUrl = getAnouncementUrl(role())
+     if(getUrl !== ''){
+       axios.get(`${getUrl}`)
+       .then(function (response) {
+         if(response.status === 200){
+           setAnnouncement(response.data.data)
+         }
+      })
+       .catch(err => {
+         navigate('/page-404')
+      })
+     }
+    
+  }, []);
+
+  useEffect(() => {
+    const getRoute = getRouteByRole(role())
+    if(auth){
+      fetch(`${getRoute}${user_id()}`)
+      .then(res=> res.json())
+      .then(response => {
+        setUser(response.data)
+      })
+      .catch(err => {
+         navigate('/page-404')
+      })
+    }
   }, [])
 
   if(user.length === 0) {
       return
   }
 
+  const LogoutUser = () => {
+        setAccessUser(false)
+        setAuth(false)
+        reactLocalStorage.remove('userAccess');
+        navigate("/login");
+  }
   const showSmallSidebarHandler = () => {
     setShowSmallSidebar(!showSmallSidebar)
   }
 
   const showSidebarMobile = () => {
     setShowNav(true)
-    console.log('clicked',showNav)
   }
 
   return (
@@ -72,11 +125,44 @@ const HeaderBar = () => {
 
         </div>
         <div className="user-area">
-          <div className="notification">
-            <FontAwesomeIcon icon={solid('bell')} />
-          </div>
+        {
+          role() !== 'admin' && (
+
+            <div className="notification-announcement">
+            <div className="notification" onClick={showDropDownNotify}>
+              <FontAwesomeIcon icon={solid('bell')} />
+              <span className="notification-wrapper">
+                <span className="list">{announcement.length}</span>
+              </span>
+            </div>
+              {
+                displayDropDownNotify && (
+                  <DropdownNotification announcement={announcement} setDisplayDropDownNotify={setDisplayDropDownNotify} />
+                )
+              }
+            </div>
+          )
+        }
+          
           <div className="user-wrapper">
             <UserImage user_photo={user.user_photo}/>
+            <div className="thedropdown">
+              {
+                !displayDropDown && (
+                  <FontAwesomeIcon onClick={showDropDown} icon={solid('angle-down')} />
+                )
+              }
+              {
+                displayDropDown && (
+                  <FontAwesomeIcon onClick={hideDropDown} icon={solid('angle-up')} />
+                )
+              }
+              {
+              displayDropDown && (
+                <Dropdown user={user} LogoutUser={LogoutUser} />
+              )
+              }
+            </div>
           </div>
         </div>
       </HeaderWrapper>
@@ -101,19 +187,58 @@ const HeaderWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: ${({isMobile}) => isMobile ? '0px 1rem' : '0px 3rem'}
+    gap: ${({isMobile}) => isMobile ? '0px 2rem' : '0px 3rem'}
    }
-   .user-wrapper {
-   }
+    .user-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
    .notification {
        color: #747474;
        font-size: 25px;
+      position: relative; 
+      &:hover {
+    cursor: pointer;
+    color: #3498ec;
    }
+   }
+   
    .search-bar input {
     border: none;
     padding: 5px 0px;
     width: 100%;
 }
+.notification-announcement {
+    position: relative;
+}
+span.notications {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    z-index: 99999;
+    color: #fff;
+}
+
+span.notification-wrapper {
+    position: relative;
+}
+span.list {
+font-size: 13px;
+    background: red;
+    color: #fff;
+    border-radius: 5px;
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 23px;
+    height: 23px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .search-bar {
     display: flex;
     align-items: center;
@@ -154,6 +279,13 @@ input[placeholder="Search here"]:focus {
     cursor: pointer;
     transition: all 200ms ease-in;
    }
+}
+.thedropdown {
+    color: #414141;
+    font-size: 15px;
+    &:hover {
+      cursor: pointer;
+    }
 }
 
 `
